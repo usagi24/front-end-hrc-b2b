@@ -4,7 +4,7 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 
 import AdvanceSearchDialog from "./AdvanceSearchDialog";
-
+import AnalyticsDialog from "./AnalyticsDialog";
 import DeleteDialog from './DeleteDialog';
 import AddDialog from './AddDialog';
 import EditDialog from './EditDialog';
@@ -58,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
 
 function LeftButtonGroup(props) {
     const [advanceSearchDialog, setAdvanceSearchDialog] = useState(false);
+    const [analyticsDialog, setAnalyticsDialog] = useState(false);
     const classes = useStyles();
 
     const [isBackdropOpen, setIsBackdropOpen] = useState(false);
@@ -67,9 +68,14 @@ function LeftButtonGroup(props) {
                 <Button style={{
                     width: '100%', backgroundColor: '#4fc3f7', color: '#fff', borderColor: '#fff'
                 }} variant="contained" disableElevation disabled>predict</Button>
-                <Button style={{ width: '100%', color: '#fff', borderColor: '#4fc3f7' }}>analytics view</Button>
+                <Button style={{ width: '100%', color: '#fff', borderColor: '#4fc3f7' }} onClick={() => setAnalyticsDialog(true)}>analytics view</Button>
                 <Button onClick={() => setAdvanceSearchDialog(true)} style={{ width: '100%', color: '#fff', borderColor: '#4fc3f7' }}>advance search</Button>
             </ButtonGroup>
+            <AnalyticsDialog 
+                open={analyticsDialog} closeDialog={() => {
+                    setAnalyticsDialog(false);
+                }}
+            />
             <AdvanceSearchDialog open={advanceSearchDialog} closeDialog={() => {
                 setAdvanceSearchDialog(false);
             }} handleIsBackdropOpen={(mode) => {
@@ -254,7 +260,7 @@ export default function TableView(props) {
 
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
+        // setPage(0);
     };
 
     function handleCheckedAll(event, checkedAll) {
