@@ -312,7 +312,7 @@ export default function TableView(props) {
             <TableContainer>
                 {
                     tableData.length !== 0 &&
-                    <Table className={classes.table} size='small' >
+                        <Table className={classes.table} size='small' >
                         <TableHead>
                             <TableRow>
                                 <TableCell padding='checkbox'>
