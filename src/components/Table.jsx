@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from "react";
+import axios from 'axios';
+
+// Mui Components 
+
 import { Table, TableBody, TableContainer, TableCell, TableHead, TableRow, TablePagination, Paper, Checkbox, Button, ButtonGroup, Grid, TextField, Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import RefreshIcon from '@material-ui/icons/Refresh';
+
+// Dialogbox Components
 
 import AdvanceSearchDialog from "./AdvanceSearchDialog";
 import AnalyticsDialog from "./AnalyticsDialog";
 import DeleteDialog from './DeleteDialog';
 import AddDialog from './AddDialog';
 import EditDialog from './EditDialog';
-import axios from 'axios';
 
+// theming
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,6 +25,15 @@ const useStyles = makeStyles((theme) => ({
         color: '#fff',
         ' & .MuiCheckbox-root': {
             color: '#fff',
+        },
+        '& .Mui-checked': {
+            color: '#4fc3f7',
+        },
+        '& .MuiCheckbox-indeterminate': {
+            color: '#4fc3f7',
+        },
+        '& .MuiTableCell-head': {
+            padding: '0.5rem 1rem',
         },
     },
     paper: {
@@ -29,30 +44,30 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#283D4A',
     },
     button: {
-        borderColor: '#4fc3f7',
         width: '100%',
-        '&:disabled': {
-            borderColor: '#1C658C'
-        },
         '& .MuiButton-root': {
             fontSize: '0.8rem',
-        }
-    },
-    tablecellHead: {
-        minWidth: '2rem',
-        padding: '0.8rem',
-        color: '#fff',
-        textAlign: 'center'
+        },
+        '& .MuiButton-contained': {
+            width: '100%',
+            color: '#fff',
+            backgroundColor: '#4fc3f7',
+            borderColor: '#fff'
+        },
+        '& .MuiButton-outlined': {
+            width: '100%',
+            color: '#fff',
+            borderColor: '#4fc3f7',
+            '&:disabled': {
+                borderColor: '#1C658C'
+            },
+        },
     },
     tablecell: {
         minWidth: '2rem',
         padding: '0.2rem',
         color: '#fff',
-        textAlign: 'center'
-    },
-    makeHeaderStickey: {
-        overflowX: "initial",
-        overflowY: "initial"
+        textAlign: 'center',
     },
     backdrop: {
         zIndex: theme.zIndex.drawer + 1,
@@ -68,32 +83,36 @@ function LeftButtonGroup(props) {
     const [isBackdropOpen, setIsBackdropOpen] = useState(false);
     return (
         <div style={{ padding: '25px 14px 10px' }}>
-            <ButtonGroup className={classes.button} style={{ display: 'flex', width: '100%', flexDirection: 'row', alignItems: 'flex-start', justifyContent: "flex-start" }} aria-label="outlined button group">
-                <Button style={{
-                    width: '100%', backgroundColor: '#4fc3f7', color: '#fff', borderColor: '#fff'
-                }} variant="contained" disableElevation disabled>predict</Button>
-                <Button style={{ width: '100%', color: '#fff', borderColor: '#4fc3f7' }} onClick={() => setAnalyticsDialog(true)}>analytics view</Button>
-                <Button onClick={() => setAdvanceSearchDialog(true)} style={{ width: '100%', color: '#fff', borderColor: '#4fc3f7'}}>advance search</Button>
-                <Button onClick={() => {
-                    setIsBackdropOpen(true);
-                    props.fetchData();
-                    setTimeout(() => {
-                        setIsBackdropOpen(false);
-                    }, 5000);    
+            <ButtonGroup className={classes.button} aria-label="outlined button group">
+                <Button variant="contained" disableElevation disabled>predict</Button>
+                <Button onClick={() => setAnalyticsDialog(true)}>analytics view</Button>
+                <Button onClick={() => setAdvanceSearchDialog(true)} >advance search</Button>
+                <Button style={{ padding: '0.27rem', width: '5%' }}
+                    onClick={() => {
+                        setIsBackdropOpen(true);
+                        props.fetchData();
+                        setTimeout(() => {
+                            setIsBackdropOpen(false);
+                        }, 5000);
                     }
-                }
-                    style={{ color: '#fff', borderColor: '#4fc3f7', padding: '0.27rem' }}><RefreshIcon /></Button>
+                    }
+                ><RefreshIcon /></Button>
             </ButtonGroup>
-            <AnalyticsDialog 
-                open={analyticsDialog} closeDialog={() => {
+            <AnalyticsDialog
+                open={analyticsDialog}
+                closeDialog={() => {
                     setAnalyticsDialog(false);
                 }}
             />
-            <AdvanceSearchDialog open={advanceSearchDialog} closeDialog={() => {
-                setAdvanceSearchDialog(false);
-            }} handleIsBackdropOpen={(mode) => {
-                setIsBackdropOpen(mode);
-                }} setAdvancedSearchData={e => {
+            <AdvanceSearchDialog
+                open={advanceSearchDialog}
+                closeDialog={() => {
+                    setAdvanceSearchDialog(false);
+                }}
+                handleIsBackdropOpen={(mode) => {
+                    setIsBackdropOpen(mode);
+                }}
+                setAdvancedSearchData={e => {
                     props.setAdvancedSearchData(e);
                     setIsBackdropOpen(false);
                 }} />
@@ -115,36 +134,43 @@ function RightButtonGroup(props) {
 
     return (
         <div style={{ padding: '25px 14px 10px' }}>
-            <ButtonGroup className={classes.button} style={{ display: 'flex', flexDirection: 'row', width: '100%', alignItems: 'flex-end', justifyContent: "flex-end" }} aria-label="outlined button group">
-
-                <Button onClick={() => setAddDialog(true)} style={{width: '100%', color: '#fff', borderColor: '#4fc3f7' }}>add</Button>
-                <Button className={classes.button} onClick={() => setEditDialog(true)} style={{ width: '100%', color: '#fff' }} disabled={props.handleCheckboxCount() !== 1}>edit</Button>
-                <Button className={classes.button} style={{ width: '100%', color: '#fff' }} onClick={() => setDeleteDialog(true)}
-                    disabled={props.handleCheckboxCount() < 1}>delete</Button>
+            <ButtonGroup className={classes.button} aria-label="outlined button group">
+                <Button onClick={() => setAddDialog(true)}>add</Button>
+                <Button onClick={() => setEditDialog(true)} disabled={props.handleCheckboxCount() !== 1}>edit</Button>
+                <Button onClick={() => setDeleteDialog(true)} disabled={props.handleCheckboxCount() < 1}>delete</Button>
             </ButtonGroup>
-            <AddDialog open={addDialog}
+            <AddDialog
+                open={addDialog}
                 setSortModeDefault={() => props.setSortModeDefault()}
                 fetchData={() => props.fetchData()}
                 closeDialog={() => {
-                setAddDialog(false);
-            }} handleIsBackdropOpen={(mode) => {
-                setIsBackdropOpen(mode);
-            }} />
-            <EditDialog open={editDialog}
+                    setAddDialog(false);
+                }}
+                handleIsBackdropOpen={(mode) => {
+                    setIsBackdropOpen(mode);
+                }} />
+            <EditDialog
+                open={editDialog}
                 setSortModeDefault={() => props.setSortModeDefault()}
                 fetchData={() => props.fetchData()}
                 closeDialog={() => {
-                setEditDialog(false);
-            }} getSl_no={() => props.getSl_no()} handleIsBackdropOpen={(mode) => {
-                setIsBackdropOpen(mode);
-            }} />
-            <DeleteDialog open={deleteDialog}
+                    setEditDialog(false);
+                }}
+                getSl_no={() => props.getSl_no()}
+                handleIsBackdropOpen={(mode) => {
+                    setIsBackdropOpen(mode);
+                }} />
+            <DeleteDialog
+                open={deleteDialog}
                 setSortModeDefault={() => props.setSortModeDefault()}
-                fetchData={() => props.fetchData()} closeDialog={() => {
-                setDeleteDialog(false);
-            }} getSl_no={() => props.getSl_no()} handleIsBackdropOpen={(mode) => {
-                setIsBackdropOpen(mode);
-            }} />
+                fetchData={() => props.fetchData()}
+                closeDialog={() => {
+                    setDeleteDialog(false);
+                }}
+                getSl_no={() => props.getSl_no()}
+                handleIsBackdropOpen={(mode) => {
+                    setIsBackdropOpen(mode);
+                }} />
             <Backdrop className={classes.backdrop} open={isBackdropOpen}>
                 <CircularProgress color="inherit" />
             </Backdrop>
@@ -185,7 +211,7 @@ function Search(props) {
                             setIsEntered(false);
                         }
                     }
-                }}/>
+                }} />
             </Paper>
         </Grid>
     );
@@ -208,7 +234,6 @@ export default function TableView(props) {
     const [colSort, setColSort] = useState(dataArray[0]);
     const [sortMode, setSortMode] = useState('ASC');
     const [isBackdropOpen, setIsBackdropOpen] = useState(false);
-
 
 
     function fetchData() {
@@ -248,10 +273,10 @@ export default function TableView(props) {
 
     function handleApplySort(col) {
         let tempSortMode;
+
         if (col === colSort) {
             tempSortMode = revertSortMode(sortMode);
         }
-        
         else {
             setColSort(col);
             tempSortMode = 'ASC';
@@ -272,11 +297,6 @@ export default function TableView(props) {
         return isSelected.reduce((accumulator, number) => accumulator + number, 0)
     }
 
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        // setPage(0);
-    };
-
     function handleCheckedAll(event, checkedAll) {
         const temp = checkedAll ? new Array(tableData.length).fill(true) : new Array(tableData.length).fill(false);
         setIsSelected(temp);
@@ -284,13 +304,17 @@ export default function TableView(props) {
         setIsAnySelected(true);
     }
 
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        // setPage(0);
+    };
+
     useEffect(() => {
         fetchData();
     }, [])
 
     useEffect(() => {
     }, [tableData])
-
 
     useEffect(() => {
     }, [isAnySelected])
@@ -304,29 +328,29 @@ export default function TableView(props) {
         !props.isBackdropOpen &&
         <div className={classes.root} style={{ backgroundColor: '#283D4A', minHeight: '75vh' }}>
             {/* <Paper className={classes.paper}> */}
-                <Backdrop className={classes.backdrop} open={isBackdropOpen}>
-                    <CircularProgress color="inherit" />
-                </Backdrop>
+            <Backdrop className={classes.backdrop} open={isBackdropOpen}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <Grid
                 container
                 direction="row"
                 style={{ marginBottom: '1.5rem' }}
             >
                 <Grid item xs={5}>
-                        <LeftButtonGroup setSortModeDefault={() => setSortMode('ASC')} setAdvancedSearchData={e => setAdvancedSearchData(e)} fetchData={() => fetchData()}/>
+                    <LeftButtonGroup setSortModeDefault={() => setSortMode('ASC')} setAdvancedSearchData={e => setAdvancedSearchData(e)} fetchData={() => fetchData()} />
                 </Grid>
                 <Grid item xs={2} style={{ marginTop: '1.2rem' }}>
-                        <Search setTableData={(data) => setTableData(data)} fetchData={ () => fetchData()}/>
+                    <Search setTableData={(data) => setTableData(data)} fetchData={() => fetchData()} />
                 </Grid>
                 <Grid item xs={5}>
-                        <RightButtonGroup setSortModeDefault={() => setSortMode('ASC')} handleCheckboxCount={() => handleCheckboxCount()} getSl_no={() => getSl_no()} fetchData={() => fetchData()} />
+                    <RightButtonGroup setSortModeDefault={() => setSortMode('ASC')} handleCheckboxCount={() => handleCheckboxCount()} getSl_no={() => getSl_no()} fetchData={() => fetchData()} />
                 </Grid>
             </Grid>
 
             <TableContainer>
                 {
                     tableData.length !== 0 &&
-                        <Table className={classes.table} size='small' >
+                    <Table className={classes.table} size='small' >
                         <TableHead>
                             <TableRow>
                                 <TableCell padding='checkbox'>
@@ -343,20 +367,18 @@ export default function TableView(props) {
                                             />
                                     }
                                 </TableCell>
-                                        {/* <TableSortLabel> */}
                                 {
-                                            headerArray.map((element, index) => <TableCell onClick={() => {
-                                                handleApplySort(dataArray[index]);
-                                            }} key={index} classes={{
-                                        root: classes.tablecellHead,
+                                    headerArray.map((element, index) => <TableCell onClick={() => {
+                                        handleApplySort(dataArray[index]);
+                                    }} key={index} classes={{
+                                        root: classes.tablecell,
                                     }}
-                                            ><span style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>{element}
-                                                    {
-                                                        dataArray[index] === colSort ? sortMode === 'ASC' ? <ArrowDropUpIcon /> : <ArrowDropDownIcon /> : <ArrowDropUpIcon />
-                                                    }
-                                                    </span></TableCell>)
+                                    ><span style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>{element}
+                                            {
+                                                dataArray[index] === colSort ? sortMode === 'ASC' ? <ArrowDropUpIcon /> : <ArrowDropDownIcon /> : <ArrowDropUpIcon />
                                             }
-                                        {/* </TableSortLabel> */}
+                                        </span></TableCell>)
+                                }
                             </TableRow>
                         </TableHead>
                         <TableBody> {
