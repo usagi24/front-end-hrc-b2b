@@ -31,7 +31,9 @@ function App() {
       {/* <ThemeProvider theme={globalTheme}> */}
 
       {!isBackdropOpen && <Header />}
-      <TableView isBackdropOpen={isBackdropOpen} closeBackdrop={() => setIsBackdropOpen(false)} />
+      <TableView isBackdropOpen={isBackdropOpen}
+        closeBackdrop={() => setIsBackdropOpen(false)} 
+        />
       {!isBackdropOpen && <Footer />}
         
         <Backdrop className={classes.backdrop} open={isBackdropOpen}>
