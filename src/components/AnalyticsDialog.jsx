@@ -22,6 +22,7 @@ ChartJS.register(
     Legend
 );
 
+ChartJS.defaults.color = 'white';
 
 const useStyles = makeStyles((theme) => ({
     root: {

@@ -83,7 +83,37 @@ function LeftButtonGroup(props) {
     return (
         <div style={{ padding: '25px 14px 10px' }}>
             <ButtonGroup className={classes.button} aria-label="outlined button group">
-                <Button variant="contained" disableElevation disabled>predict</Button>
+                <Button variant="contained" disableElevation onClick={() => {
+                    const doc_idList = props.getDoc_id();
+                    console.log(doc_idList);
+                    axios({
+                        url: '/get_prediction',
+                        method: 'post',
+                        baseURL: 'http://localhost:5000/',
+                        data: {
+                            data: doc_idList,
+                        }
+                    }).then((res) => {
+                        console.log(res.data);
+                        const data = res.data;
+                        let doc_id_list = [], aging_bucket_list = [];
+                        data.map((element, index) => {
+                            doc_id_list.push(Number(element["doc_id"]));
+                            aging_bucket_list.push(element["aging_bucket"]);
+                        })
+                        axios({
+                            url: '/UpdateAgingBucket',
+                            method: 'get',
+                            baseURL: 'http://localhost:8080/hrcservlet/',
+                            params: {
+                                doc_id_list: doc_id_list.join(','),
+                                aging_bucket_list: aging_bucket_list.join(','),
+                            }
+                        }).then((res) => {
+                            props.fetchData();
+                        })
+                    })
+                }}>predict</Button>
                 <Button onClick={() => setAnalyticsDialog(true)}>analytics view</Button>
                 <Button onClick={() => setAdvanceSearchDialog(true)} >advance search</Button>
                 <Button style={{ padding: '0.27rem', width: '5%' }}
@@ -226,9 +256,9 @@ export default function TableView(props) {
 
     const classes = useStyles();
 
-    const headerArray = ['Sl no', 'Business Code', 'Customer Number', 'Clear Date', 'Business Year', 'Document ID', 'Posting Date', 'Document Create Date', 'Due Date', 'Invoice Currency', 'Document Type', 'Posting ID', 'Total Open Amount', 'Baseline Create Date', 'Customer Payment Terms', 'Invoice ID', 'Predicted']
+    const headerArray = ['Sl no', 'Business Code', 'Customer Number', 'Clear Date', 'Business Year', 'Document ID', 'Posting Date', 'Document Create Date', 'Due Date', 'Invoice Currency', 'Document Type', 'Posting ID', 'Total Open Amount', 'Baseline Create Date', 'Customer Payment Terms', 'Invoice ID', 'Aging Bucket']
 
-    const dataArray = ['sl_no', 'business_code', 'cust_number', 'clear_date', 'buisness_year', 'doc_id', 'posting_date', 'document_create_date', 'due_in_date', 'invoice_currency', 'document_type', 'posting_id', 'total_open_amount', 'baseline_create_date', 'cust_payment_terms', 'invoice_id', 'predicted'];
+    const dataArray = ['sl_no', 'business_code', 'cust_number', 'clear_date', 'buisness_year', 'doc_id', 'posting_date', 'document_create_date', 'due_in_date', 'invoice_currency', 'document_type', 'posting_id', 'total_open_amount', 'baseline_create_date', 'cust_payment_terms', 'invoice_id', 'aging_bucket'];
 
     // State variables
 
@@ -301,6 +331,14 @@ export default function TableView(props) {
         return tempSl_no;
     }
 
+    function getDoc_id() {
+        let tempDoc_id = [];
+        tableData.map((element, index) => {
+            if (isSelected[index]) tempDoc_id.push(Number(element['doc_id']));
+        })
+        return tempDoc_id;
+    }
+
     function handleCheckboxCount() {
         return isSelected.reduce((accumulator, number) => accumulator + number, 0)
     }
@@ -350,6 +388,7 @@ export default function TableView(props) {
                         setSortModeDefault={() => setSortMode('ASC')}
                         setAdvancedSearchData={e => setAdvancedSearchData(e)}
                         fetchData={() => fetchData()}
+                        getDoc_id={() => getDoc_id()}
                     />
                 </Grid>
                 <Grid item xs={2} style={{ marginTop: '1.2rem' }}>

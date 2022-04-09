@@ -108,7 +108,13 @@ export default function AdvanceSearchDialog(props) {
                 <Grid xs={6}>
                     <Button classes={{
                         root: classes.inputRoot
-                    }} fullWidth={true} variant="outlined" autoFocus onClick={() => advancedSearch()} color="primary"
+                    }} fullWidth={true} variant="outlined" autoFocus onClick={() => {
+                        advancedSearch();
+                        setDocumentId('');
+                        setInvoiceId('');
+                        setCustomerNumber('');
+                        setBusinessYear('');
+                    }} color="primary"
                         disabled={
                             documentId === '' &&
                             invoiceId === '' &&
