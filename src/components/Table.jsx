@@ -21,6 +21,7 @@ import EditDialog from './EditDialog';
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
+        minHeight: '75vh',
         background: '#283D4A',
         color: '#fff',
         ' & .MuiCheckbox-root': {
@@ -36,11 +37,7 @@ const useStyles = makeStyles((theme) => ({
             padding: '0.5rem 1rem',
         },
     },
-    paper: {
-        width: '100%',
-    },
     table: {
-        // minHeight: '75vh',
         backgroundColor: '#283D4A',
     },
     button: {
@@ -74,6 +71,8 @@ const useStyles = makeStyles((theme) => ({
         color: '#fff',
     },
 }))
+
+// LeftButtonGroup
 
 function LeftButtonGroup(props) {
     const [advanceSearchDialog, setAdvanceSearchDialog] = useState(false);
@@ -123,13 +122,15 @@ function LeftButtonGroup(props) {
     );
 }
 
+// RightButtonGroup
+
 function RightButtonGroup(props) {
+
+    const classes = useStyles();
 
     const [addDialog, setAddDialog] = useState(false);
     const [editDialog, setEditDialog] = useState(false);
     const [deleteDialog, setDeleteDialog] = useState(false);
-    const classes = useStyles();
-
     const [isBackdropOpen, setIsBackdropOpen] = useState(false);
 
     return (
@@ -178,6 +179,8 @@ function RightButtonGroup(props) {
     );
 }
 
+// Search
+
 function Search(props) {
 
     const [isEntered, setIsEntered] = useState(false);
@@ -217,6 +220,8 @@ function Search(props) {
     );
 }
 
+// Main Table
+
 export default function TableView(props) {
 
     const classes = useStyles();
@@ -224,6 +229,8 @@ export default function TableView(props) {
     const headerArray = ['Sl no', 'Business Code', 'Customer Number', 'Clear Date', 'Business Year', 'Document ID', 'Posting Date', 'Document Create Date', 'Due Date', 'Invoice Currency', 'Document Type', 'Posting ID', 'Total Open Amount', 'Baseline Create Date', 'Customer Payment Terms', 'Invoice ID', 'Predicted']
 
     const dataArray = ['sl_no', 'business_code', 'cust_number', 'clear_date', 'buisness_year', 'doc_id', 'posting_date', 'document_create_date', 'due_in_date', 'invoice_currency', 'document_type', 'posting_id', 'total_open_amount', 'baseline_create_date', 'cust_payment_terms', 'invoice_id', 'predicted'];
+
+    // State variables
 
     const [tableData, setTableData] = useState([]);
     const [page, setPage] = useState(0);
@@ -235,10 +242,11 @@ export default function TableView(props) {
     const [sortMode, setSortMode] = useState('ASC');
     const [isBackdropOpen, setIsBackdropOpen] = useState(false);
 
+    // Functions
 
     function fetchData() {
-        fetch("http://localhost:8080/hrcservlet/GetData").then(async (res) => {
-            const data = await res.json();
+        axios.get("http://localhost:8080/hrcservlet/GetData").then((res) => {
+            const data = res.data;
             setTableData(data);
 
             const rowsCollection = new Array(data.length).fill(false);
@@ -309,6 +317,8 @@ export default function TableView(props) {
         // setPage(0);
     };
 
+    // useEffect
+
     useEffect(() => {
         fetchData();
     }, [])
@@ -326,8 +336,7 @@ export default function TableView(props) {
 
     return (
         !props.isBackdropOpen &&
-        <div className={classes.root} style={{ backgroundColor: '#283D4A', minHeight: '75vh' }}>
-            {/* <Paper className={classes.paper}> */}
+        <div className={classes.root}>
             <Backdrop className={classes.backdrop} open={isBackdropOpen}>
                 <CircularProgress color="inherit" />
             </Backdrop>
@@ -337,13 +346,25 @@ export default function TableView(props) {
                 style={{ marginBottom: '1.5rem' }}
             >
                 <Grid item xs={5}>
-                    <LeftButtonGroup setSortModeDefault={() => setSortMode('ASC')} setAdvancedSearchData={e => setAdvancedSearchData(e)} fetchData={() => fetchData()} />
+                    <LeftButtonGroup
+                        setSortModeDefault={() => setSortMode('ASC')}
+                        setAdvancedSearchData={e => setAdvancedSearchData(e)}
+                        fetchData={() => fetchData()}
+                    />
                 </Grid>
                 <Grid item xs={2} style={{ marginTop: '1.2rem' }}>
-                    <Search setTableData={(data) => setTableData(data)} fetchData={() => fetchData()} />
+                    <Search
+                        setTableData={(data) => setTableData(data)}
+                        fetchData={() => fetchData()}
+                    />
                 </Grid>
                 <Grid item xs={5}>
-                    <RightButtonGroup setSortModeDefault={() => setSortMode('ASC')} handleCheckboxCount={() => handleCheckboxCount()} getSl_no={() => getSl_no()} fetchData={() => fetchData()} />
+                    <RightButtonGroup
+                        setSortModeDefault={() => setSortMode('ASC')}
+                        handleCheckboxCount={() => handleCheckboxCount()}
+                        getSl_no={() => getSl_no()}
+                        fetchData={() => fetchData()}
+                    />
                 </Grid>
             </Grid>
 
@@ -357,32 +378,37 @@ export default function TableView(props) {
                                     {
                                         isAllSelected ?
                                             <Checkbox
-                                                checked={true}
                                                 id="checkedAll"
+                                                checked={true}
                                                 onChange={handleCheckedAll}
                                             /> : <Checkbox
-                                                indeterminate={isSelected.reduce((accumulator, number) => accumulator || number, false)}
                                                 id="checkedAll"
+                                                indeterminate={isSelected.reduce((accumulator, number) => accumulator || number, false)}
                                                 onChange={handleCheckedAll}
                                             />
                                     }
                                 </TableCell>
                                 {
-                                    headerArray.map((element, index) => <TableCell onClick={() => {
-                                        handleApplySort(dataArray[index]);
-                                    }} key={index} classes={{
-                                        root: classes.tablecell,
-                                    }}
-                                    ><span style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>{element}
-                                            {
-                                                dataArray[index] === colSort ? sortMode === 'ASC' ? <ArrowDropUpIcon /> : <ArrowDropDownIcon /> : <ArrowDropUpIcon />
-                                            }
-                                        </span></TableCell>)
+                                    headerArray.map((element, index) =>
+                                        <TableCell
+                                            classes={{ root: classes.tablecell }}
+                                            key={index}
+                                            onClick={() => {
+                                                handleApplySort(dataArray[index]);
+                                            }}
+                                        >
+                                            <span style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>{element}
+                                                {
+                                                    dataArray[index] === colSort ?
+                                                        sortMode === 'ASC' ? <ArrowDropUpIcon /> : <ArrowDropDownIcon /> : <ArrowDropUpIcon />
+                                                }
+                                            </span>
+                                        </TableCell>)
                                 }
                             </TableRow>
                         </TableHead>
                         <TableBody> {
-                            tableData.slice(page * rowsPerPage, (page + 1) * rowsPerPage).map((element, index) => <TableRow key={page * rowsPerPage + index} style={{ height: 30 }}
+                            tableData.slice(page * rowsPerPage, (page + 1) * rowsPerPage).map((element, index) => <TableRow style={{ height: 30 }} key={page * rowsPerPage + index}
                             >
                                 <TableCell padding='checkbox'>
                                     <Checkbox
@@ -401,11 +427,12 @@ export default function TableView(props) {
                                     />
                                 </TableCell>
                                 {
-                                    dataArray.map((rowElement, idx) => <TableCell classes={{
-                                        root: classes.tablecell,
-                                    }}
-                                        key={idx}
-                                    > {element[rowElement] ? element[rowElement] : '-'}</TableCell>)
+                                    dataArray.map((rowElement, idx) =>
+                                        <TableCell key={idx}
+                                            classes={{ root: classes.tablecell }}
+                                        >
+                                            {element[rowElement] ? element[rowElement] : '-'}
+                                        </TableCell>)
                                 }
 
                             </TableRow>)
@@ -418,8 +445,8 @@ export default function TableView(props) {
             {
                 tableData.length !== 0 &&
                 <TablePagination style={{ color: '#fff' }}
-                    rowsPerPageOptions={[5, 10, 25]}
                     component="div"
+                    rowsPerPageOptions={[5, 10, 25]}
                     count={tableData.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
@@ -430,7 +457,6 @@ export default function TableView(props) {
                 >
                 </TablePagination>
             }
-            {/* </Paper> */}
         </div>
     );
 }

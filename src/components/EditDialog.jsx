@@ -28,7 +28,6 @@ export default function EditDialog(props) {
     const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const classes = useStyles();
 
-    // const [slNo, setslNo] = useState('');
     const [invoiceCurrency, setInvoiceCurrency] = useState('');
     const [customerPaymentTerms, setCustomerPaymentTerms] = useState('');
 
@@ -73,64 +72,68 @@ export default function EditDialog(props) {
 
     return (
         <>
-        <Dialog
-            PaperProps={{
-                style: {
-                    backgroundColor: "#2D4250",
-                },
-            }}
-            fullScreen={fullScreen}
-            open={props.open}
-            onClose={() => props.closeDialog()}
-        >
-
-            <DialogTitle
-                classes={{
-                    root: classes.inputRoot
+            <Dialog
+                PaperProps={{
+                    style: {
+                        backgroundColor: "#2D4250",
+                    },
                 }}
+                fullScreen={fullScreen}
+                open={props.open}
+                onClose={() => props.closeDialog()}
             >
-                {"Edit"}
-            </DialogTitle>
-            <DialogContent>
-                <Grid container direction="row" spacing={2}>
-                    <Grid container item xs>
-                        <Paper className={classes.root} >
-                            <TextField label="Invoice Currency" onChange={(event) => setInvoiceCurrency(event.target.value)}/>
-                        </Paper>
-                    </Grid>
-                    <Grid container item xs>
-                        <Paper className={classes.root}>
-                            <TextField label="Customer Payment Terms" onChange={(event) => setCustomerPaymentTerms(event.target.value)}/>
-                        </Paper>
-                    </Grid>
-                </Grid>
-                <br />
-            </DialogContent>
-            <DialogActions>
-                <Grid xs={6}>
 
-                    <Button classes={{
+                <DialogTitle
+                    classes={{
                         root: classes.inputRoot
-                    }} fullWidth={true} variant="outlined" autoFocus onClick={() => editData()} color="primary"
-                        disabled={
-                            invoiceCurrency === '' && customerPaymentTerms === ''
-                    }
-                    >
-                        Edit
-                    </Button>
-                </Grid>
-                <Grid xs={6}>
-
-                    <Button classes={{
-                        root: classes.inputRoot
-                        }} fullWidth={true} variant="outlined" onClick={() => {
+                    }}
+                >
+                    {"Edit"}
+                </DialogTitle>
+                <DialogContent>
+                    <Grid container direction="row" spacing={2}>
+                        <Grid container item xs>
+                            <Paper className={classes.root} >
+                                <TextField label="Invoice Currency" onChange={(event) => setInvoiceCurrency(event.target.value)} />
+                            </Paper>
+                        </Grid>
+                        <Grid container item xs>
+                            <Paper className={classes.root}>
+                                <TextField label="Customer Payment Terms" onChange={(event) => setCustomerPaymentTerms(event.target.value)} />
+                            </Paper>
+                        </Grid>
+                    </Grid>
+                    <br />
+                </DialogContent>
+                <DialogActions>
+                    <Grid xs={6}>
+                        <Button
+                            classes={{ root: classes.inputRoot }}
+                            fullWidth={true}
+                            variant="outlined"
+                            autoFocus
+                            color="primary"
+                            disabled={
+                                invoiceCurrency === '' && customerPaymentTerms === ''
+                            }
+                            onClick={() => editData()}
+                        >
+                            Edit
+                        </Button>
+                    </Grid>
+                    <Grid xs={6}>
+                        <Button
+                            classes={{ root: classes.inputRoot }}
+                            fullWidth={true}
+                            variant="outlined"
+                            onClick={() => {
                             props.closeDialog();
                             setToDefault();
                         }} color="primary" autoFocus>
-                        Cancel
-                    </Button>
-                </Grid>
-            </DialogActions>
+                            Cancel
+                        </Button>
+                    </Grid>
+                </DialogActions>
             </Dialog>
             {
                 resultState && <>
