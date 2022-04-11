@@ -20,7 +20,16 @@ const useStyles = makeStyles((theme) => ({
     root: {
         "& .MuiTextField-root": {
             width: "28ch"
-        }
+        },
+        '& .MuiAlert-icon': {
+            color: '#fff',
+        },
+        '& .MuiAlert-filledSuccess': {
+            background: '#4caf50',
+        },
+        '& .MuiAlert-filledError': {
+            background: '#f44336',
+        },
     },
     inputRoot: {
         color: "#fff",
@@ -511,11 +520,11 @@ export default function AddDialog(props) {
                 resultState && <>
                     {
                         error ? <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
-                            <Alert severity="error">
+                            <Alert severity="error" variant="filled">
                                 Error!
                             </Alert>
                         </Snackbar> : <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
-                            <Alert severity="success">
+                                <Alert severity="success" variant="filled">
                                 Added Successfully!
                             </Alert>
                         </Snackbar>

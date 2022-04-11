@@ -215,6 +215,14 @@ export default function AnalyticsDialog(props) {
                             }} fullWidth={true} variant="outlined" autoFocus onClick={() => {
                                 setAnalyticsData(null);
                                 setChartMode(false);
+                                props.closeDialog();
+                                setStartClearDate('');
+                                setEndClearDate('');
+                                setStartDueDate('');
+                                setEndDueDate('');
+                                setStartBaselineCreateDate('');
+                                setEndBaselineCreateDate('');
+                                setInvoiceCurrency('');
                             }}
                         >
                             close

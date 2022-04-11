@@ -5,6 +5,18 @@ import { Alert } from '@material-ui/lab';
 
 const useStyles = makeStyles((theme) => ({
 
+    root: {
+        '& .MuiAlert-icon': {
+            color: '#fff',
+        },
+        '& .MuiAlert-filledSuccess': {
+            background: '#4caf50',
+        },
+        '& .MuiAlert-filledError': {
+            background: '#f44336',
+        }
+    },
+    
     inputRoot: {
         color: '#fff',
         borderColor: '#fff',
@@ -102,11 +114,11 @@ export default function DeleteDialog(props) {
                 resultState && <>
                     {
                         error ? <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
-                            <Alert severity="error">
+                            <Alert severity="error" variant="filled">
                                 Error!
                             </Alert>
                         </Snackbar> : <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
-                            <Alert severity="success">
+                                <Alert severity="success" variant="filled">
                                 Deleted Successfully!
                             </Alert>
                         </Snackbar>

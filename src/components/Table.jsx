@@ -3,10 +3,11 @@ import axios from 'axios';
 
 // Mui Components 
 
-import { Table, TableBody, TableContainer, TableCell, TableHead, TableRow, TablePagination, Paper, Checkbox, Button, ButtonGroup, Grid, TextField, Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
+import { Table, TableBody, TableContainer, TableCell, TableHead, TableRow, TablePagination, Paper, Checkbox, Button, ButtonGroup, Grid, TextField, Backdrop, CircularProgress, Snackbar, makeStyles } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import { Alert } from '@material-ui/lab';
 
 // Dialogbox Components
 
@@ -36,6 +37,18 @@ const useStyles = makeStyles((theme) => ({
         '& .MuiTableCell-head': {
             padding: '0.5rem 1rem',
         },
+        '& .MuiTableRow-hover': {
+            backgroundColor: '#283D4F',
+        },
+        '& .MuiAlert-icon': {
+            color: '#fff',
+        },
+        '& .MuiAlert-filledSuccess': {
+            background: '#4caf50',
+        },
+        '& .MuiAlert-filledError': {
+            background: '#f44336',
+        }
     },
     table: {
         backgroundColor: '#283D4A',
@@ -80,40 +93,58 @@ function LeftButtonGroup(props) {
     const classes = useStyles();
 
     const [isBackdropOpen, setIsBackdropOpen] = useState(false);
+
+    const [open, setOpen] = useState(true);
+    const [resultState, setResultState] = useState(false);
+    const [error, setError] = useState(false);
+
     return (
         <div style={{ padding: '25px 14px 10px' }}>
             <ButtonGroup className={classes.button} aria-label="outlined button group">
-                <Button variant="contained" disableElevation onClick={() => {
-                    const doc_idList = props.getDoc_id();
-                    console.log(doc_idList);
-                    axios({
-                        url: '/get_prediction',
-                        method: 'post',
-                        baseURL: 'http://localhost:5000/',
-                        data: {
-                            data: doc_idList,
-                        }
-                    }).then((res) => {
-                        console.log(res.data);
-                        const data = res.data;
-                        let doc_id_list = [], aging_bucket_list = [];
-                        data.map((element, index) => {
-                            doc_id_list.push(Number(element["doc_id"]));
-                            aging_bucket_list.push(element["aging_bucket"]);
-                        })
+                <Button variant="contained"
+                    disableElevation
+                    disabled={props.handleCheckboxCount() < 1}
+                    onClick={() => {
+                        const doc_idList = props.getDoc_id();
+                        setIsBackdropOpen(true);
                         axios({
-                            url: '/UpdateAgingBucket',
-                            method: 'get',
-                            baseURL: 'http://localhost:8080/hrcservlet/',
-                            params: {
-                                doc_id_list: doc_id_list.join(','),
-                                aging_bucket_list: aging_bucket_list.join(','),
+                            url: '/get_prediction',
+                            method: 'post',
+                            baseURL: 'http://localhost:5000/',
+                            data: {
+                                data: doc_idList,
                             }
                         }).then((res) => {
-                            props.fetchData();
+                            const data = res.data;
+                            let doc_id_list = [], aging_bucket_list = [];
+                            data.map((element, index) => {
+                                doc_id_list.push(Number(element["doc_id"]));
+                                aging_bucket_list.push(element["aging_bucket"]);
+                            })
+                            axios({
+                                url: '/UpdateAgingBucket',
+                                method: 'get',
+                                baseURL: 'http://localhost:8080/hrcservlet/',
+                                params: {
+                                    doc_id_list: doc_id_list.join(','),
+                                    aging_bucket_list: aging_bucket_list.join(','),
+                                }
+                            }).then((res) => {
+                                props.fetchData();
+                                setTimeout(() => {
+                                    setError(!res.data);
+                                    setResultState(true);
+                                }, 5000)
+                                setTimeout(() => {
+                                    setError(false);
+                                    setResultState(false);
+                                }, 6500)
+                                setTimeout(() => {
+                                    setIsBackdropOpen(false);
+                                }, 5000)
+                            })
                         })
-                    })
-                }}>predict</Button>
+                    }}>predict</Button>
                 <Button onClick={() => setAnalyticsDialog(true)}>analytics view</Button>
                 <Button onClick={() => setAdvanceSearchDialog(true)} >advance search</Button>
                 <Button style={{ padding: '0.27rem', width: '5%' }}
@@ -145,9 +176,25 @@ function LeftButtonGroup(props) {
                     props.setAdvancedSearchData(e);
                     setIsBackdropOpen(false);
                 }} />
+
             <Backdrop className={classes.backdrop} open={isBackdropOpen}>
                 <CircularProgress color="inherit" />
             </Backdrop>
+            {
+                resultState && <>
+                    {
+                        error ? <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
+                            <Alert severity="error" variant="filled">
+                                Error!
+                            </Alert>
+                        </Snackbar> : <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
+                            <Alert severity="success" variant="filled">
+                                Predicted Successfully!
+                            </Alert>
+                        </Snackbar>
+                    }
+                </>
+            }
         </div>
     );
 }
@@ -389,6 +436,7 @@ export default function TableView(props) {
                         setAdvancedSearchData={e => setAdvancedSearchData(e)}
                         fetchData={() => fetchData()}
                         getDoc_id={() => getDoc_id()}
+                        handleCheckboxCount={() => handleCheckboxCount()}
                     />
                 </Grid>
                 <Grid item xs={2} style={{ marginTop: '1.2rem' }}>
@@ -447,7 +495,7 @@ export default function TableView(props) {
                             </TableRow>
                         </TableHead>
                         <TableBody> {
-                            tableData.slice(page * rowsPerPage, (page + 1) * rowsPerPage).map((element, index) => <TableRow style={{ height: 30 }} key={page * rowsPerPage + index}
+                            tableData.slice(page * rowsPerPage, (page + 1) * rowsPerPage).map((element, index) => <TableRow hover style={{ height: 30 }} key={page * rowsPerPage + index}
                             >
                                 <TableCell padding='checkbox'>
                                     <Checkbox
