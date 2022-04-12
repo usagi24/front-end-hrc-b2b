@@ -1,6 +1,13 @@
-import React, {useState} from "react";
-import { Grid, Paper, TextField, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, useMediaQuery, useTheme, makeStyles } from "@material-ui/core/";
+// React components
+
+import React, { useState } from "react";
 import axios from 'axios';
+
+// Mui components
+
+import { Grid, Paper, TextField, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, useMediaQuery, useTheme, makeStyles } from "@material-ui/core/";
+
+// theming
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,10 +34,14 @@ export default function AdvanceSearchDialog(props) {
     const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const classes = useStyles();
 
+    // State variables
+
     const [documentId, setDocumentId] = useState('');
     const [invoiceId, setInvoiceId] = useState('');
     const [customerNumber, setCustomerNumber] = useState('');
     const [businessYear, setBusinessYear] = useState('');
+
+    // functions
 
     function advancedSearch() {
         props.handleIsBackdropOpen(true);
@@ -51,6 +62,8 @@ export default function AdvanceSearchDialog(props) {
             props.handleIsBackdropOpen(false);
         })
     }
+
+    // DialogBox
 
     return (
         <Dialog
@@ -75,28 +88,40 @@ export default function AdvanceSearchDialog(props) {
                 <Grid container direction="row" spacing={2}>
                     <Grid justifyContent="center" container item xs>
                         <Paper className={classes.root} >
-                            <TextField value={documentId} label="Document ID" onChange={(event) => {
+                            <TextField
+                                value={documentId}
+                                label="Document ID"
+                                onChange={(event) => {
                                 setDocumentId(event.target.value);
                             }}/>
                         </Paper>
                     </Grid>
                     <Grid justifyContent="center" container item xs>
                         <Paper className={classes.root}>
-                            <TextField value={invoiceId} label="Invoice ID" onChange={(event) => {
+                            <TextField
+                                value={invoiceId}
+                                label="Invoice ID"
+                                onChange={(event) => {
                                 setInvoiceId(event.target.value);
                             }}/>
                         </Paper>
                     </Grid>
                     <Grid justifyContent="center" container item xs>
                         <Paper className={classes.root}>
-                            <TextField value={customerNumber} label="Customer Number" onChange={(event) => {
+                            <TextField
+                                value={customerNumber}
+                                label="Customer Number"
+                                onChange={(event) => {
                                 setCustomerNumber(event.target.value);
                             }}/>
                         </Paper>
                     </Grid>
                     <Grid justifyContent="center" container item xs>
                         <Paper className={classes.root}>
-                            <TextField value={businessYear} label="Business Year" onChange={(event) => {
+                            <TextField
+                                value={businessYear}
+                                label="Business Year"
+                                onChange={(event) => {
                                 setBusinessYear(event.target.value);
                             }}/>
                         </Paper>
@@ -106,9 +131,11 @@ export default function AdvanceSearchDialog(props) {
             </DialogContent>
             <DialogActions>
                 <Grid xs={6}>
-                    <Button classes={{
-                        root: classes.inputRoot
-                    }} fullWidth={true} variant="outlined" autoFocus onClick={() => {
+                    <Button classes={{ root: classes.inputRoot }}
+                        variant="outlined"
+                        fullWidth={true}
+                        autoFocus
+                        onClick={() => {
                         advancedSearch();
                         setDocumentId('');
                         setInvoiceId('');
@@ -126,15 +153,19 @@ export default function AdvanceSearchDialog(props) {
                     </Button>
                 </Grid>
                 <Grid xs={6}>
-                    <Button classes={{
-                        root: classes.inputRoot
-                    }} fullWidth={true} variant="outlined" onClick={() => {
+                    <Button
+                        classes={{ root: classes.inputRoot }}
+                        variant="outlined"
+                        fullWidth={true}
+                        autoFocus
+                        onClick={() => {
                         props.closeDialog();
                         setDocumentId('');
                         setInvoiceId('');
                         setCustomerNumber('');
                         setBusinessYear('');
-                    }} color="primary" autoFocus>
+                        }}
+                        color="primary">
                         Cancel
                     </Button>
                 </Grid>

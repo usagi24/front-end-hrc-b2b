@@ -1,6 +1,13 @@
+// React components
+
 import React, { useState } from "react";
-import { Grid, Paper, TextField, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Box, useMediaQuery, useTheme, makeStyles } from "@material-ui/core/";
+
+// Mui components
+
+import { Grid, Paper, TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle, Box, Typography, useMediaQuery, useTheme, makeStyles } from "@material-ui/core/";
 import axios from 'axios';
+
+// Chartjs components
 
 import {
     Chart as ChartJS,
@@ -24,6 +31,8 @@ ChartJS.register(
 
 ChartJS.defaults.color = 'white';
 
+// theming
+
 const useStyles = makeStyles((theme) => ({
     root: {
         '& .MuiTextField-root': {
@@ -42,6 +51,12 @@ const useStyles = makeStyles((theme) => ({
             borderColor: '#D1D1D1',
         }
     },
+    labelRoot: {
+        textAlign: 'left',
+        color: '#fff',
+        width: '100%',
+        padding: '0.5rem 0.7rem'
+    },
 }));
 
 export default function AnalyticsDialog(props) {
@@ -49,8 +64,8 @@ export default function AnalyticsDialog(props) {
     const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const classes = useStyles();
 
-    const [chartMode, setChartMode] = useState(false);
-
+    // State variables
+    
     const [startClearDate, setStartClearDate] = useState('');
     const [endClearDate, setEndClearDate] = useState('');
     const [startDueDate, setStartDueDate] = useState('');
@@ -59,15 +74,17 @@ export default function AnalyticsDialog(props) {
     const [endBaselineCreateDate, setEndBaselineCreateDate] = useState('');
     const [invoiceCurrency, setInvoiceCurrency] = useState('');
 
+    const [chartMode, setChartMode] = useState(false);
+
     const options = {
         responsive: true
     };
 
     const [analyticsData, setAnalyticsData] = useState(null);
 
+    // functions
+
     function analytics() {
-        // props.handleIsBackdropOpen(true);
-        // props.closeDialog();
         axios({
             url: '/Analytics',
             method: 'get',
@@ -86,14 +103,24 @@ export default function AnalyticsDialog(props) {
             console.log(data);
             setAnalyticsData(data);
             setChartMode(true);
-            // props.setAdvancedSearchData(data);
-            // props.handleIsBackdropOpen(false);
         })
     }
 
     function getStringFromDate(date) {
         return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
     }
+
+    function setToDefault() {
+        setStartClearDate('');
+        setEndClearDate('');
+        setStartDueDate('');
+        setEndDueDate('');
+        setStartBaselineCreateDate('');
+        setEndBaselineCreateDate('');
+        setInvoiceCurrency('');
+    }
+
+    // DialogBox
 
     return (
         <Dialog
@@ -134,66 +161,93 @@ export default function AnalyticsDialog(props) {
                     <Grid container direction="row" spacing={2}>
                         <Grid justifyContent="center" container item xs spacing={2}>
                             <Grid justifyContent="center" container item xs>
-                                <p style={{ textAlign: 'left', color: '#fff', width: '100%', padding: '0.5rem 0.7rem' }}>
+                                <Typography classes={{ root: classes.labelRoot }}>
                                     Clear Date
-                                </p>
+                                </Typography>
                                 <Paper className={classes.root} >
-                                    <TextField type="date" label="From" InputLabelProps={{ shrink: true }} onChange={(event) => {
-                                        setStartClearDate(getStringFromDate(new Date(event.target.value)));
-                                    }} />
+                                    <TextField
+                                        type="date"
+                                        label="From"
+                                        InputLabelProps={{ shrink: true }}
+                                        onChange={(event) => {
+                                            setStartClearDate(getStringFromDate(new Date(event.target.value)));
+                                        }} />
                                 </Paper>
                             </Grid>
                             <Grid justifyContent="center" container item xs>
                                 <Paper className={classes.root} >
-                                    <TextField type="date" label="To" InputLabelProps={{ shrink: true }} onChange={(event) => {
-                                        setEndClearDate(getStringFromDate(new Date(event.target.value)));
-                                    }} />
+                                    <TextField
+                                        type="date"
+                                        label="To"
+                                        InputLabelProps={{ shrink: true }}
+                                        onChange={(event) => {
+                                            setEndClearDate(getStringFromDate(new Date(event.target.value)));
+                                        }} />
                                 </Paper>
                             </Grid>
                             <Grid justifyContent="center" container item xs>
-                                <p style={{ textAlign: 'left', color: '#fff', width: '100%', padding: '0.5rem 0.7rem' }}>
+                                <Typography classes={{ root: classes.labelRoot }}>
                                     Baseline Create Date
-                                </p>
+                                </Typography>
                                 <Paper className={classes.root}>
-                                    <TextField type="date" label="From" InputLabelProps={{ shrink: true }} onChange={(event) => {
-                                        setStartBaselineCreateDate(getStringFromDate(new Date(event.target.value)));
-                                    }} />
+                                    <TextField
+                                        type="date"
+                                        label="From"
+                                        InputLabelProps={{ shrink: true }}
+                                        onChange={(event) => {
+                                            setStartBaselineCreateDate(getStringFromDate(new Date(event.target.value)));
+                                        }} />
                                 </Paper>
                             </Grid>
                             <Grid justifyContent="center" container item xs>
                                 <Paper className={classes.root}>
-                                    <TextField type="date" label="To" InputLabelProps={{ shrink: true }} onChange={(event) => {
-                                        setEndBaselineCreateDate(getStringFromDate(new Date(event.target.value)));
-                                    }} />
+                                    <TextField
+                                        type="date"
+                                        label="To"
+                                        InputLabelProps={{ shrink: true }}
+                                        onChange={(event) => {
+                                            setEndBaselineCreateDate(getStringFromDate(new Date(event.target.value)));
+                                        }} />
                                 </Paper>
                             </Grid>
                         </Grid>
                         <Grid justifyContent="center" container item xs spacing={2}>
                             <Grid justifyContent="center" container item xs>
-                                <p style={{ textAlign: 'left', color: '#fff', width: '100%', padding: '0.5rem 0.7rem' }}>
+                                <Typography classes={{ root: classes.labelRoot }}>
                                     Due Date
-                                </p>
+                                </Typography>
                                 <Paper className={classes.root}>
-                                    <TextField type="date" label="From" InputLabelProps={{ shrink: true }} onChange={(event) => {
-                                        setStartDueDate(getStringFromDate(new Date(event.target.value)));
-                                    }} />
+                                    <TextField
+                                        type="date"
+                                        label="From"
+                                        InputLabelProps={{ shrink: true }}
+                                        onChange={(event) => {
+                                            setStartDueDate(getStringFromDate(new Date(event.target.value)));
+                                        }} />
                                 </Paper>
                             </Grid>
                             <Grid justifyContent="center" container item xs>
                                 <Paper className={classes.root}>
-                                    <TextField type="date" label="To" InputLabelProps={{ shrink: true }} onChange={(event) => {
-                                        setEndDueDate(getStringFromDate(new Date(event.target.value)));
-                                    }} />
+                                    <TextField
+                                        type="date"
+                                        label="To"
+                                        InputLabelProps={{ shrink: true }}
+                                        onChange={(event) => {
+                                            setEndDueDate(getStringFromDate(new Date(event.target.value)));
+                                        }} />
                                 </Paper>
                             </Grid>
                             <Grid justifyContent="center" container item xs>
-                                <p style={{ textAlign: 'left', color: '#fff', width: '100%', padding: '0.5rem 0.7rem' }}>
+                                <Typography classes={{ root: classes.labelRoot }}>
                                     Invoice Currency
-                                </p>
+                                </Typography>
                                 <Paper className={classes.root}>
-                                    <TextField value={invoiceCurrency} label="Invoice Currency" onChange={(event) => {
-                                        setInvoiceCurrency(event.target.value);
-                                    }} />
+                                    <TextField
+                                        value={invoiceCurrency}
+                                        label="Invoice Currency"
+                                        onChange={(event) => {
+                                            setInvoiceCurrency(event.target.value);
+                                        }} />
                                 </Paper>
                             </Grid>
                             <Grid justifyContent="center" container item xs>
@@ -207,60 +261,60 @@ export default function AnalyticsDialog(props) {
                 <br />
             </DialogContent>
             <DialogActions>
-                <Grid xs={6}>
-                    {
-                        chartMode ? <Button
-                            classes={{
-                                root: classes.inputRoot
-                            }} fullWidth={true} variant="outlined" autoFocus onClick={() => {
+                {
+                    chartMode ?
+                        <Grid xs={6} container justifyContent="flex-end"><Button
+                            classes={{ root: classes.inputRoot }}
+                            fullWidth={true}
+                            variant="outlined"
+                            autoFocus
+                            onClick={() => {
                                 setAnalyticsData(null);
                                 setChartMode(false);
                                 props.closeDialog();
-                                setStartClearDate('');
-                                setEndClearDate('');
-                                setStartDueDate('');
-                                setEndDueDate('');
-                                setStartBaselineCreateDate('');
-                                setEndBaselineCreateDate('');
-                                setInvoiceCurrency('');
+                                setToDefault();
                             }}
                         >
                             close
-                        </Button> :
-
-                            <Button classes={{
-                                root: classes.inputRoot
-                            }} fullWidth={true} variant="outlined" autoFocus onClick={() => analytics()} color="primary"
-                                disabled={
-                                    startClearDate === '' ||
-                                    endClearDate === '' ||
-                                    startDueDate === '' ||
-                                    endDueDate === '' ||
-                                    startBaselineCreateDate === '' ||
-                                    endBaselineCreateDate === '' ||
-                                    invoiceCurrency === ''
-                                }
-                            >
-                                Submit
-                            </Button>
-                    }
-                </Grid>
-                <Grid xs={6}>
-                    <Button classes={{
-                        root: classes.inputRoot
-                    }} fullWidth={true} variant="outlined" onClick={() => {
-                        props.closeDialog();
-                        setStartClearDate('');
-                        setEndClearDate('');
-                        setStartDueDate('');
-                        setEndDueDate('');
-                        setStartBaselineCreateDate('');
-                        setEndBaselineCreateDate('');
-                        setInvoiceCurrency('');
-                    }} color="primary" autoFocus>
-                        Cancel
-                    </Button>
-                </Grid>
+                        </Button>
+                        </Grid> :
+                        <Grid container direction="row" xs={12} spacing={1}>
+                            <Grid item xs={6}>
+                                <Button classes={{ root: classes.inputRoot }}
+                                    fullWidth={true}
+                                    variant="outlined"
+                                    autoFocus
+                                    onClick={() => analytics()}
+                                    color="primary"
+                                    disabled={
+                                        startClearDate === '' ||
+                                        endClearDate === '' ||
+                                        startDueDate === '' ||
+                                        endDueDate === '' ||
+                                        startBaselineCreateDate === '' ||
+                                        endBaselineCreateDate === '' ||
+                                        invoiceCurrency === ''
+                                    }>
+                                    Submit
+                                </Button>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Button
+                                    classes={{ root: classes.inputRoot }}
+                                    fullWidth={true}
+                                    variant="outlined"
+                                    onClick={() => {
+                                        props.closeDialog();
+                                        setToDefault();
+                                    }}
+                                    color="primary"
+                                    autoFocus>
+                                    Cancel
+                                </Button>
+                            </Grid>
+                        </Grid>
+                }
+                
             </DialogActions>
         </Dialog>
     );

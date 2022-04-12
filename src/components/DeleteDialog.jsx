@@ -1,7 +1,12 @@
 import React, { useState } from "react";
+
+// Mui components 
+
 import { Grid, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, useMediaQuery, useTheme, makeStyles } from "@material-ui/core/";
 import axios from "axios";
 import { Alert } from '@material-ui/lab';
+
+// theming
 
 const useStyles = makeStyles((theme) => ({
 
@@ -13,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
             background: '#4caf50',
         },
         '& .MuiAlert-filledError': {
-            background: '#f44336',
+            background: '#d32f2f',
         }
     },
     
@@ -31,9 +36,13 @@ export default function DeleteDialog(props) {
     const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const classes = useStyles();
 
+    // State variables
+
     const [open, setOpen] = useState(true);
     const [resultState, setResultState] = useState(false);
     const [error, setError] = useState(false);
+
+    // functions
 
     function deleteData() {
         props.handleIsBackdropOpen(true);
@@ -55,12 +64,14 @@ export default function DeleteDialog(props) {
             setTimeout(() => {
                 setError(false);
                 setResultState(false);
-            }, 10000)
+            }, 10500)
             setTimeout(() => {
                 props.handleIsBackdropOpen(false);
             }, 9000)
         })
     }
+
+    // DialogBox
 
     return (
         <>
@@ -93,18 +104,23 @@ export default function DeleteDialog(props) {
                 </DialogContent>
                 <DialogActions>
                     <Grid xs={6}>
-
-                        <Button classes={{
-                            root: classes.inputRoot
-                        }} fullWidth={true} variant="outlined" autoFocus onClick={() => props.closeDialog()} color="primary">
+                        <Button classes={{ root: classes.inputRoot }}
+                            fullWidth={true}
+                            variant="outlined"
+                            autoFocus
+                            onClick={() => props.closeDialog()}
+                            color="primary">
                             Cancel
                         </Button>
                     </Grid>
                     <Grid xs={6}>
 
-                        <Button classes={{
-                            root: classes.inputRoot
-                        }} fullWidth={true} variant="outlined" onClick={() => deleteData()} color="primary" autoFocus>
+                        <Button classes={{ root: classes.inputRoot }}
+                            fullWidth={true}
+                            variant="outlined"
+                            onClick={() => deleteData()}
+                            color="primary"
+                            autoFocus>
                             Delete
                         </Button>
                     </Grid>
@@ -113,11 +129,19 @@ export default function DeleteDialog(props) {
             {
                 resultState && <>
                     {
-                        error ? <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
+                        error ? <Snackbar
+                            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                            open={open}
+                            autoHideDuration={6000}
+                            onClose={() => setOpen(false)}>
                             <Alert severity="error" variant="filled">
-                                Error!
+                                Oops! something wasn't right 
                             </Alert>
-                        </Snackbar> : <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
+                        </Snackbar> : <Snackbar
+                                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                                open={open}
+                                autoHideDuration={6000}
+                                onClose={() => setOpen(false)}>
                                 <Alert severity="success" variant="filled">
                                 Deleted Successfully!
                             </Alert>

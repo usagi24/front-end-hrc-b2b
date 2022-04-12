@@ -1,3 +1,5 @@
+// React components
+
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
 
@@ -47,11 +49,8 @@ const useStyles = makeStyles((theme) => ({
             background: '#4caf50',
         },
         '& .MuiAlert-filledError': {
-            background: '#f44336',
+            background: '#d32f2f',
         }
-    },
-    table: {
-        backgroundColor: '#283D4A',
     },
     button: {
         width: '100%',
@@ -73,6 +72,9 @@ const useStyles = makeStyles((theme) => ({
             },
         },
     },
+    table: {
+        backgroundColor: '#283D4A',
+    },
     tablecell: {
         minWidth: '2rem',
         padding: '0.2rem',
@@ -88,20 +90,23 @@ const useStyles = makeStyles((theme) => ({
 // LeftButtonGroup
 
 function LeftButtonGroup(props) {
-    const [advanceSearchDialog, setAdvanceSearchDialog] = useState(false);
-    const [analyticsDialog, setAnalyticsDialog] = useState(false);
+
     const classes = useStyles();
 
-    const [isBackdropOpen, setIsBackdropOpen] = useState(false);
+    // State variables
 
+    const [advanceSearchDialog, setAdvanceSearchDialog] = useState(false);
+    const [analyticsDialog, setAnalyticsDialog] = useState(false);
     const [open, setOpen] = useState(true);
     const [resultState, setResultState] = useState(false);
     const [error, setError] = useState(false);
+    const [isBackdropOpen, setIsBackdropOpen] = useState(false);
 
     return (
         <div style={{ padding: '25px 14px 10px' }}>
             <ButtonGroup className={classes.button} aria-label="outlined button group">
-                <Button variant="contained"
+                <Button style={{ textShadow: "1px 1px 10px #06113C" }}
+                    variant="contained"
                     disableElevation
                     disabled={props.handleCheckboxCount() < 1}
                     onClick={() => {
@@ -138,7 +143,7 @@ function LeftButtonGroup(props) {
                                 setTimeout(() => {
                                     setError(false);
                                     setResultState(false);
-                                }, 6500)
+                                }, 7500)
                                 setTimeout(() => {
                                     setIsBackdropOpen(false);
                                 }, 5000)
@@ -154,8 +159,7 @@ function LeftButtonGroup(props) {
                         setTimeout(() => {
                             setIsBackdropOpen(false);
                         }, 5000);
-                    }
-                    }
+                    }}
                 ><RefreshIcon /></Button>
             </ButtonGroup>
             <AnalyticsDialog
@@ -185,7 +189,7 @@ function LeftButtonGroup(props) {
                     {
                         error ? <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
                             <Alert severity="error" variant="filled">
-                                Error!
+                                Oops! something wasn't right 
                             </Alert>
                         </Snackbar> : <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
                             <Alert severity="success" variant="filled">
@@ -204,6 +208,8 @@ function LeftButtonGroup(props) {
 function RightButtonGroup(props) {
 
     const classes = useStyles();
+
+    // State variables
 
     const [addDialog, setAddDialog] = useState(false);
     const [editDialog, setEditDialog] = useState(false);
@@ -256,7 +262,7 @@ function RightButtonGroup(props) {
     );
 }
 
-// Search
+// Search field
 
 function Search(props) {
 
@@ -265,7 +271,7 @@ function Search(props) {
     return (
         <Grid container>
             <Paper elavation={0}>
-                <TextField size='small' height='5.5ch' id="filled-search" label="Search Customer ID" type="search" variant="filled" onChange={(event) => {
+                <TextField size='small' height='5.5ch' id="filled-search" label="Search Customer ID" type="search" variant="filled" multiline={true} onChange={(event) => {
                     const value = event.target.value;
                     console.log(value);
                     if (value?.length === 9) {
@@ -399,7 +405,6 @@ export default function TableView(props) {
 
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
-        // setPage(0);
     };
 
     // useEffect

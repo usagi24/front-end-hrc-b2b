@@ -1,7 +1,12 @@
 import React, { useState } from "react";
+
+// Mui components 
+
 import { Grid, Paper, TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle, Snackbar, useMediaQuery, useTheme, makeStyles } from "@material-ui/core/";
 import axios from "axios";
 import { Alert } from '@material-ui/lab';
+
+// theming
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -15,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
             background: '#4caf50',
         },
         '& .MuiAlert-filledError': {
-            background: '#f44336',
+            background: '#d32f2f',
         }
     },
     inputRoot: {
@@ -37,12 +42,16 @@ export default function EditDialog(props) {
     const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const classes = useStyles();
 
+    // State variables
+
     const [invoiceCurrency, setInvoiceCurrency] = useState('');
     const [customerPaymentTerms, setCustomerPaymentTerms] = useState('');
 
     const [open, setOpen] = useState(true);
     const [resultState, setResultState] = useState(false);
     const [error, setError] = useState(false);
+
+    // functions
 
     function editData() {
         props.handleIsBackdropOpen(true);
@@ -67,7 +76,7 @@ export default function EditDialog(props) {
             setTimeout(() => {
                 setError(false);
                 setResultState(false);
-            }, 6500)
+            }, 7500)
             setTimeout(() => {
                 props.handleIsBackdropOpen(false);
             }, 5000)
@@ -78,6 +87,8 @@ export default function EditDialog(props) {
         setInvoiceCurrency('');
         setCustomerPaymentTerms('');
     }
+
+    // DialogBox
 
     return (
         <>
@@ -103,12 +114,18 @@ export default function EditDialog(props) {
                     <Grid container direction="row" spacing={2}>
                         <Grid container item xs>
                             <Paper className={classes.root} >
-                                <TextField label="Invoice Currency" onChange={(event) => setInvoiceCurrency(event.target.value)} />
+                                <TextField label="Invoice Currency"
+                                    onChange={(event) =>
+                                        setInvoiceCurrency(event.target.value)
+                                    } />
                             </Paper>
                         </Grid>
                         <Grid container item xs>
                             <Paper className={classes.root}>
-                                <TextField label="Customer Payment Terms" onChange={(event) => setCustomerPaymentTerms(event.target.value)} />
+                                <TextField label="Customer Payment Terms"
+                                    onChange={(event) =>
+                                        setCustomerPaymentTerms(event.target.value)
+                                    } />
                             </Paper>
                         </Grid>
                     </Grid>
@@ -136,9 +153,11 @@ export default function EditDialog(props) {
                             fullWidth={true}
                             variant="outlined"
                             onClick={() => {
-                            props.closeDialog();
-                            setToDefault();
-                        }} color="primary" autoFocus>
+                                props.closeDialog();
+                                setToDefault();
+                            }}
+                            color="primary"
+                            autoFocus>
                             Cancel
                         </Button>
                     </Grid>
@@ -147,12 +166,20 @@ export default function EditDialog(props) {
             {
                 resultState && <>
                     {
-                        error ? <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
+                        error ? <Snackbar
+                            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                            open={open}
+                            autoHideDuration={6000}
+                            onClose={() => setOpen(false)}>
                             <Alert severity="error" variant="filled">
-                                Error!
+                                Oops! something wasn't right 
                             </Alert>
-                        </Snackbar> : <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
-                                <Alert severity="success" variant="filled">
+                        </Snackbar> : <Snackbar
+                            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                            open={open}
+                            autoHideDuration={6000}
+                            onClose={() => setOpen(false)}>
+                            <Alert severity="success" variant="filled">
                                 Edited Successfully!
                             </Alert>
                         </Snackbar>

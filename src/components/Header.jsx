@@ -1,8 +1,17 @@
+// React components
+
 import React from "react";
+
+// Mui Components 
+
 import { Grid, makeStyles } from '@material-ui/core';
+
+// Assests
 
 import abclogo from '../assets/ABCLogoFull.svg';
 import logo from '../assets/hrcLogo.svg';
+
+// theming
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -16,21 +25,15 @@ export default function Header() {
     const classes = useStyles();
     return (
         <div className={classes.root}>
-            <Grid
-                container
-                justifyContent="center"
-                alignItems="center"
-            >
-                <Grid container item xs justifyContent="flex-start"
-                    alignItems="flex-start">
+            <Grid container>
+                <Grid
+                    container item xs justifyContent="flex-start" alignItems="flex-start">
                     <img src={abclogo} alt={"ABC Products"} style={{ width: '250px' }} />
                 </Grid>
-                <Grid item xs>
+                <Grid item xs > 
                     <img src={logo} alt={"highradius"} style={{ width: '190px' }} />
                 </Grid>
-                <Grid item xs>
-                    
-                </Grid>
+                <Grid item xs />
             </Grid>
         </div>
 

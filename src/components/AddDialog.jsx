@@ -1,20 +1,12 @@
 import React, { useState } from "react";
-import {
-    Grid,
-    Paper,
-    TextField,
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Snackbar,
-    useMediaQuery,
-    useTheme,
-    makeStyles,
-} from "@material-ui/core/";
+
+// Mui components 
+
+import { Grid, Paper, TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle, Snackbar, useMediaQuery, useTheme, makeStyles } from "@material-ui/core/";
 import { Alert } from '@material-ui/lab';
 import axios from "axios";
+
+// theming
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -28,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
             background: '#4caf50',
         },
         '& .MuiAlert-filledError': {
-            background: '#f44336',
+            background: '#d32f2f',
         },
     },
     inputRoot: {
@@ -50,9 +42,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function AddDialog(props) {
+
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const classes = useStyles();
+
+    // State variables
 
     const [businessCode, setBusinessCode] = useState('');
     const [customerNumber, setCustomerNumber] = useState('');
@@ -74,6 +69,8 @@ export default function AddDialog(props) {
     const [open, setOpen] = useState(true);
     const [resultState, setResultState] = useState(false);
     const [error, setError] = useState(false);
+
+    // functions
 
     function addData() {
         props.handleIsBackdropOpen(true);
@@ -111,7 +108,7 @@ export default function AddDialog(props) {
             setTimeout(() => {
                 setError(false);
                 setResultState(false);
-            }, 6500)
+            }, 7500)
             setTimeout(() => {
                 props.handleIsBackdropOpen(false);
             }, 5000)
@@ -140,6 +137,8 @@ export default function AddDialog(props) {
         setInvoiceId('');
     }
 
+    // DialogBox
+
     return (
         <div>
             <Dialog
@@ -163,14 +162,8 @@ export default function AddDialog(props) {
                 </DialogTitle>
                 <DialogContent>
                     <Grid container direction="row" spacing={2}>
-                        <Grid
-                            container
-                            item
-                            xs
-                            classes={{
-                                root: classes.gridRoot
-                            }}
-                        >
+                        <Grid container item xs
+                            classes={{ root: classes.gridRoot }}>
                             <Paper className={classes.root}>
                                 <TextField
                                     required
@@ -181,14 +174,8 @@ export default function AddDialog(props) {
                                 />
                             </Paper>
                         </Grid>
-                        <Grid
-                            container
-                            item
-                            xs
-                            classes={{
-                                root: classes.gridRoot
-                            }}
-                        >
+                        <Grid container item xs
+                            classes={{ root: classes.gridRoot }}>
                             <Paper className={classes.root}>
                                 <TextField
                                     required
@@ -199,14 +186,8 @@ export default function AddDialog(props) {
                                 />
                             </Paper>
                         </Grid>
-                        <Grid
-                            container
-                            item
-                            xs
-                            classes={{
-                                root: classes.gridRoot
-                            }}
-                        >
+                        <Grid container item xs
+                            classes={{ root: classes.gridRoot }}>
                             <Paper className={classes.root}>
                                 <TextField
 
@@ -221,14 +202,8 @@ export default function AddDialog(props) {
                                 />
                             </Paper>
                         </Grid>
-                        <Grid
-                            container
-                            item
-                            xs
-                            classes={{
-                                root: classes.gridRoot
-                            }}
-                        >
+                        <Grid container item xs
+                            classes={{ root: classes.gridRoot }}>
                             <Paper className={classes.root}>
                                 <TextField
                                     required
@@ -239,14 +214,8 @@ export default function AddDialog(props) {
                                 />
                             </Paper>
                         </Grid>
-                        <Grid
-                            container
-                            item
-                            xs
-                            classes={{
-                                root: classes.gridRoot
-                            }}
-                        >
+                        <Grid container item xs
+                            classes={{ root: classes.gridRoot }}>
                             <Paper className={classes.root}>
                                 <TextField
                                     required
@@ -257,14 +226,8 @@ export default function AddDialog(props) {
                                 />
                             </Paper>
                         </Grid>
-                        <Grid
-                            container
-                            item
-                            xs
-                            classes={{
-                                root: classes.gridRoot
-                            }}
-                        >
+                        <Grid container item xs
+                            classes={{ root: classes.gridRoot }}>
                             <Paper className={classes.root}>
                                 <TextField
                                     required
@@ -278,14 +241,8 @@ export default function AddDialog(props) {
                                 />
                             </Paper>
                         </Grid>
-                        <Grid
-                            container
-                            item
-                            xs
-                            classes={{
-                                root: classes.gridRoot
-                            }}
-                        >
+                        <Grid container item xs
+                            classes={{ root: classes.gridRoot }}>
                             <Paper className={classes.root}>
                                 <TextField
                                     required
@@ -300,14 +257,8 @@ export default function AddDialog(props) {
                                 />
                             </Paper>
                         </Grid>
-                        <Grid
-                            container
-                            item
-                            xs
-                            classes={{
-                                root: classes.gridRoot
-                            }}
-                        >
+                        <Grid container item xs
+                            classes={{ root: classes.gridRoot }}>
                             <Paper className={classes.root}>
                                 <TextField
                                     required
@@ -322,17 +273,10 @@ export default function AddDialog(props) {
                                 />
                             </Paper>
                         </Grid>
-                        <Grid
-                            container
-                            item
-                            xs
-                            classes={{
-                                root: classes.gridRoot
-                            }}
-                        >
+                        <Grid container item xs
+                            classes={{ root: classes.gridRoot }}>
                             <Paper className={classes.root}>
-                                <TextField
-                                    required
+                                <TextField required
                                     label="Invoice Currency"
                                     onChange={(event) => {
                                         setInvoiceCurrency(event.target.value);
@@ -340,17 +284,10 @@ export default function AddDialog(props) {
                                 />
                             </Paper>
                         </Grid>
-                        <Grid
-                            container
-                            item
-                            xs
-                            classes={{
-                                root: classes.gridRoot
-                            }}
-                        >
+                        <Grid container item xs
+                            classes={{ root: classes.gridRoot }}>
                             <Paper className={classes.root}>
-                                <TextField
-                                    required
+                                <TextField required
                                     label="Document Type"
                                     onChange={(event) => {
                                         setDocumentType(event.target.value);
@@ -358,17 +295,10 @@ export default function AddDialog(props) {
                                 />
                             </Paper>
                         </Grid>
-                        <Grid
-                            container
-                            item
-                            xs
-                            classes={{
-                                root: classes.gridRoot
-                            }}
-                        >
+                        <Grid container item xs
+                            classes={{ root: classes.gridRoot }}>
                             <Paper className={classes.root}>
-                                <TextField
-                                    required
+                                <TextField required
                                     label="Posting ID"
                                     onChange={(event) => {
                                         setPostingId(event.target.value);
@@ -376,17 +306,10 @@ export default function AddDialog(props) {
                                 />
                             </Paper>
                         </Grid>
-                        <Grid
-                            container
-                            item
-                            xs
-                            classes={{
-                                root: classes.gridRoot
-                            }}
-                        >
+                        <Grid container item xs
+                            classes={{ root: classes.gridRoot }}>
                             <Paper className={classes.root}>
-                                <TextField
-                                    required
+                                <TextField required
                                     label="Total Open Amount"
                                     onChange={(event) => {
                                         setTotalOpenAmount(event.target.value);
@@ -394,17 +317,10 @@ export default function AddDialog(props) {
                                 />
                             </Paper>
                         </Grid>
-                        <Grid
-                            container
-                            item
-                            xs
-                            classes={{
-                                root: classes.gridRoot
-                            }}
-                        >
+                        <Grid container item xs
+                            classes={{ root: classes.gridRoot }}>
                             <Paper className={classes.root}>
-                                <TextField
-                                    required
+                                <TextField required
                                     type="date"
                                     label="Baseline Create Date"
                                     InputLabelProps={{
@@ -416,17 +332,10 @@ export default function AddDialog(props) {
                                 />
                             </Paper>
                         </Grid>
-                        <Grid
-                            container
-                            item
-                            xs
-                            classes={{
-                                root: classes.gridRoot
-                            }}
-                        >
+                        <Grid container item xs
+                            classes={{ root: classes.gridRoot }}>
                             <Paper className={classes.root}>
-                                <TextField
-                                    required
+                                <TextField required
                                     label="Customer Payment Terms"
                                     onChange={(event) => {
                                         setCustomerPaymentTerms(event.target.value);
@@ -434,17 +343,10 @@ export default function AddDialog(props) {
                                 />
                             </Paper>
                         </Grid>
-                        <Grid
-                            container
-                            item
-                            xs
-                            classes={{
-                                root: classes.gridRoot
-                            }}
-                        >
+                        <Grid container item xs
+                            classes={{ root: classes.gridRoot }}>
                             <Paper className={classes.root}>
-                                <TextField
-                                    required
+                                <TextField required
                                     label="Invoice ID"
                                     onChange={(event) => {
                                         setInvoiceId(event.target.value);
@@ -452,14 +354,8 @@ export default function AddDialog(props) {
                                 />
                             </Paper>
                         </Grid>
-                        <Grid
-                            container
-                            item
-                            xs
-                            classes={{
-                                root: classes.gridRoot
-                            }}
-                        >
+                        <Grid container item xs
+                            classes={{ root: classes.gridRoot }}>
                             <Paper style={{ width: "28ch" }}></Paper>
                         </Grid>
                     </Grid>
@@ -468,9 +364,7 @@ export default function AddDialog(props) {
                 <DialogActions>
                     <Grid xs={6}>
                         <Button
-                            classes={{
-                                root: classes.inputRoot
-                            }}
+                            classes={{ root: classes.inputRoot }}
                             fullWidth={true}
                             variant="outlined"
                             autoFocus
@@ -498,9 +392,7 @@ export default function AddDialog(props) {
                     </Grid>
                     <Grid xs={6}>
                         <Button
-                            classes={{
-                                root: classes.inputRoot
-                            }}
+                            classes={{ root: classes.inputRoot }}
                             fullWidth={true}
                             variant="outlined"
                             onClick={() => {
@@ -519,12 +411,20 @@ export default function AddDialog(props) {
             {
                 resultState && <>
                     {
-                        error ? <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
+                        error ? <Snackbar
+                            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                            open={open}
+                            autoHideDuration={6000}
+                            onClose={() => setOpen(false)}>
                             <Alert severity="error" variant="filled">
-                                Error!
+                                Oops! something wasn't right 
                             </Alert>
-                        </Snackbar> : <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
-                                <Alert severity="success" variant="filled">
+                        </Snackbar> : <Snackbar
+                            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                            open={open}
+                            autoHideDuration={6000}
+                            onClose={() => setOpen(false)}>
+                            <Alert severity="success" variant="filled">
                                 Added Successfully!
                             </Alert>
                         </Snackbar>
