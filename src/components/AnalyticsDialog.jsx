@@ -152,7 +152,7 @@ export default function AnalyticsDialog(props) {
                             backgroundColor: 'rgba(255, 99, 132, 0.5)',
                         },
                         {
-                            label: 'Total open amount(1K)',
+                            label: 'Total open amount(1M)',
                             data: analyticsData.amount,
                             backgroundColor: 'rgba(53, 162, 235, 0.5)',
                         },

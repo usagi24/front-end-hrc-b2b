@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
     button: {
         width: '100%',
         '& .MuiButton-root': {
-            fontSize: '0.8rem',
+            fontSize: '0.79rem',
         },
         '& .MuiButton-contained': {
             width: '100%',
@@ -273,7 +273,6 @@ function Search(props) {
             <Paper elavation={0}>
                 <TextField size='small' height='5.5ch' id="filled-search" label="Search Customer ID" type="search" variant="filled" multiline={true} onChange={(event) => {
                     const value = event.target.value;
-                    console.log(value);
                     if (value?.length === 9) {
                         axios({
                             url: '/AdvancedSearch',
