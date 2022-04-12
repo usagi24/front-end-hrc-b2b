@@ -271,7 +271,7 @@ function Search(props) {
     return (
         <Grid container>
             <Paper elavation={0}>
-                <TextField size='small' height='5.5ch' id="filled-search" label="Search Customer ID" type="search" variant="filled" multiline={true} onChange={(event) => {
+                <TextField size='small' height='5.5ch' id="filled-search" label="Search Customer ID" type="search" variant="filled" onChange={(event) => {
                     const value = event.target.value;
                     if (value?.length === 9) {
                         axios({
