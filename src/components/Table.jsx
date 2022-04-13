@@ -189,7 +189,7 @@ function LeftButtonGroup(props) {
                     {
                         error ? <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
                             <Alert severity="error" variant="filled">
-                                Oops! something wasn't right 
+                                Oops! something wasn't right
                             </Alert>
                         </Snackbar> : <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
                             <Alert severity="success" variant="filled">
@@ -273,7 +273,7 @@ function Search(props) {
             <Paper elavation={0}>
                 <TextField size='small' height='5.5ch' id="filled-search" label="Search Customer ID" type="search" variant="filled" onChange={(event) => {
                     const value = event.target.value;
-                    if (value?.length === 9) {
+                    if (value?.length === 9 && !isNaN(value)) {
                         axios({
                             url: '/AdvancedSearch',
                             method: 'get',
@@ -291,7 +291,7 @@ function Search(props) {
                         })
                     }
                     else {
-                        if (isEntered) {
+                        if (isEntered && value?.length < 9) {
                             props.fetchData();
                             setIsEntered(false);
                         }
@@ -329,7 +329,11 @@ export default function TableView(props) {
     function fetchData() {
         axios.get("http://localhost:8080/hrcservlet/GetData").then((res) => {
             const data = res.data;
-            setTableData(data);
+
+            if (res)
+                setTableData(data);
+            else
+                setTableData([]);
 
             const rowsCollection = new Array(data.length).fill(false);
             setIsSelected(rowsCollection);
